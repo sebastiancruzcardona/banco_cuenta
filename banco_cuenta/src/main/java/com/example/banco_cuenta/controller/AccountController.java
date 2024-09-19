@@ -1,6 +1,7 @@
 package com.example.banco_cuenta.controller;
 
 import com.example.banco_cuenta.dto.AccountDTO;
+import com.example.banco_cuenta.dto.AccountDTOUpdate;
 import com.example.banco_cuenta.model.Account;
 import com.example.banco_cuenta.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,29 +29,19 @@ public class AccountController {
     }
 
     @PostMapping
-    public Account createBank(@RequestBody Account account){
-        return accountService.save(account);
+    public Account createBank(@RequestBody AccountDTO accountDTO){
+        return accountService.save(accountDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Account> updateBank(@PathVariable long id, @RequestBody AccountDTO accountDTODetails){
-        Optional<Account> account = accountService.findById(id);
-        if(account.isPresent()){
-            Account updtatedAccount = account.get();
-            updtatedAccount.setUserName(accountDTODetails.getUserName());
-            updtatedAccount.setUserLastname(accountDTODetails.getUserLastname());
-            updtatedAccount.setPassword(accountDTODetails.getPassword());
-            updtatedAccount.setBalance(accountDTODetails.getBalance());
-            return ResponseEntity.ok(accountService.save(updtatedAccount));
-        }else{
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Account> updateBank(@PathVariable long id, @RequestBody AccountDTOUpdate accountDTOUpdate){
+        Optional<Account> account = accountService.update(id, accountDTOUpdate);
+        return account.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Account> deleteBank(@PathVariable long id){
-        if(accountService.findById(id).isPresent()){
-            accountService.deleteById(id);
+    public ResponseEntity<Account> deleteAccount(@PathVariable long id){
+        if(accountService.deleteById(id)){
             return ResponseEntity.ok().build();
         }else{
             return ResponseEntity.notFound().build();
