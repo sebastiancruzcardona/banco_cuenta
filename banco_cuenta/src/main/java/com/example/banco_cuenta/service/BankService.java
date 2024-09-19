@@ -22,9 +22,10 @@ public class BankService {
         return bankRepository.findById(id);
     }
 
+    //This method creates a Bank object, sets its attributes from bankDTO and saves it by calling bankRepository.save()
     public Bank save(BankDTO bankDTO) {
         Bank bank = new Bank();
-        bank.setName(bankDTO.getName());
+        bank.setName(bankDTO.getName()); //Is it necessary to try catch for a null pointer ex?
         bank.setAddress(bankDTO.getAddress());
         bank.setWebSite(bankDTO.getWebSite());
         bank.setCostumerSupportNumber(bankDTO.getCostumerSupportNumber());
@@ -32,11 +33,14 @@ public class BankService {
         return bankRepository.save(bank);
     }
 
+    //This method returns an Optional that can be present or empty.
+    //First, it tries to find the bank by id, then, if the Optional bank is present, sets the attributes and returns an Optional
+    //If there is not a bank that identified by that id, returns an empty optional
     public Optional<Bank> update(long id, BankDTO bankDTO){
-        Optional<Bank> bank = findById(id);
+        Optional<Bank> bank = bankRepository.findById(id);
         if(bank.isPresent()){
             Bank updatedBank = bank.get();
-            updatedBank.setName(bankDTO.getName());
+            updatedBank.setName(bankDTO.getName());//Is it necessary to try catch for a null pointer ex?
             updatedBank.setAddress(bankDTO.getAddress());
             updatedBank.setWebSite(bankDTO.getWebSite());
             updatedBank.setCostumerSupportNumber(bankDTO.getCostumerSupportNumber());

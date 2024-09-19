@@ -22,27 +22,37 @@ public class BankController {
     }
 
     @GetMapping("/{id}")
+    //This method calls the findById method from bankService that returns an Optional
+    //Then, tries to map the Optional bank by using the .ok() function from ResponseEntity, for this the bank has to be present
+    //If the optional is empty, executes the orElseGet() implementing a ResponseEntity.notFound().build()
+    //It is equivalent to writing:
+        /*if(bank.isPresent()){
+          return ResponseEntity.ok(bank);
+        else{
+          return ResponseEntity.notFound().build();
+        }*/
     public ResponseEntity<Bank> getBankById(@PathVariable long id){
         Optional<Bank> bank = bankService.findById(id);
         return bank.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Bank createBank(@RequestBody BankDTO bank){
-        return bankService.save(bank);
+    public Bank createBank(@RequestBody BankDTO bankDTO){
+        return bankService.save(bankDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Bank> updateBank(@PathVariable long id, @RequestBody BankDTO bankDTO){
-        Optional<Bank> bank = bankService.update(id, bankDTO);
-        //Intenta mapear el objeto bank utilizando la función ok de responseEntity, para esto el bank debe estar presente
-        //Si el optional está vacío, ejecuta el orElse haciendo implementando un ResponseEntity.notFound().build()
-        //Es equivalente a escribir:
+    //This method calls the update method from bankService that needs an id and a BankDTO object and returns an Optional
+    //Then, tries to map the Optional bank by using the .ok() function from ResponseEntity, for this the bank has to be present
+    //If the optional is empty, executes the orElseGet() implementing a ResponseEntity.notFound().build()
+    //It is equivalent to writing:
         /*if(bank.isPresent()){
           return ResponseEntity.ok(bank);
         else{
           return ResponseEntity.notFound().build();
         }*/
+    public ResponseEntity<Bank> updateBank(@PathVariable long id, @RequestBody BankDTO bankDTO){
+        Optional<Bank> bank = bankService.update(id, bankDTO);
         return bank.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
