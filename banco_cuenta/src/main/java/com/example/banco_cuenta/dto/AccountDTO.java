@@ -15,10 +15,6 @@ public class AccountDTO {
 
     private Long bankId;
 
-    public AccountDTO() {
-        super();
-    }
-
     public String getUserName() {
         return userName;
     }
@@ -49,5 +45,13 @@ public class AccountDTO {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public Long getBankId() {
+        return bankId;
+    }
+
+    public void setBankId(Long bankId) {
+        this.bankId = bankId;
     }
 }
