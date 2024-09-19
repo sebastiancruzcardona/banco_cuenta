@@ -28,30 +28,27 @@ public class BankController {
     }
 
     @PostMapping
-    public Bank createBank(@RequestBody Bank bank){
+    public Bank createBank(@RequestBody BankDTO bank){
         return bankService.save(bank);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Bank> updateBank(@PathVariable long id, @RequestBody BankDTO bankDTODetails){
-        Optional<Bank> bank = bankService.findById(id);
-        if(bank.isPresent()){
-            Bank updtatedBank = bank.get();
-            updtatedBank.setName(bankDTODetails.getName());
-            updtatedBank.setAddress(bankDTODetails.getAddress());
-            updtatedBank.setWebSite(bankDTODetails.getWebSite());
-            updtatedBank.setCostumerSupportNumber(bankDTODetails.getCostumerSupportNumber());
-            updtatedBank.setEmail(bankDTODetails.getEmail());
-            return ResponseEntity.ok(bankService.save(updtatedBank));
-        }else{
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Bank> updateBank(@PathVariable long id, @RequestBody BankDTO bankDTO){
+        Optional<Bank> bank = bankService.update(id, bankDTO);
+        //Intenta mapear el objeto bank utilizando la función ok de responseEntity, para esto el bank debe estar presente
+        //Si el optional está vacío, ejecuta el orElse haciendo implementando un ResponseEntity.notFound().build()
+        //Es equivalente a escribir:
+        /*if(bank.isPresent()){
+          return ResponseEntity.ok(bank);
+        else{
+          return ResponseEntity.notFound().build();
+        }*/
+        return bank.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Bank> deleteBank(@PathVariable long id){
-        if(bankService.findById(id).isPresent()){
-            bankService.deleteById(id);
+        if(bankService.deleteById(id)){
             return ResponseEntity.ok().build();
         }else{
             return ResponseEntity.notFound().build();

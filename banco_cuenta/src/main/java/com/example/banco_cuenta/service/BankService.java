@@ -1,5 +1,6 @@
 package com.example.banco_cuenta.service;
 
+import com.example.banco_cuenta.dto.BankDTO;
 import com.example.banco_cuenta.model.Bank;
 import com.example.banco_cuenta.repository.BankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,36 @@ public class BankService {
         return bankRepository.findById(id);
     }
 
-    public Bank save(Bank bank) {
+    public Bank save(BankDTO bankDTO) {
+        Bank bank = new Bank();
+        bank.setName(bankDTO.getName());
+        bank.setAddress(bankDTO.getAddress());
+        bank.setWebSite(bankDTO.getWebSite());
+        bank.setCostumerSupportNumber(bankDTO.getCostumerSupportNumber());
+        bank.setEmail(bankDTO.getEmail());
         return bankRepository.save(bank);
     }
 
-    public void deleteById(long id) {
-        bankRepository.deleteById(id);
+    public Optional<Bank> update(long id, BankDTO bankDTO){
+        Optional<Bank> bank = findById(id);
+        if(bank.isPresent()){
+            Bank updatedBank = bank.get();
+            updatedBank.setName(bankDTO.getName());
+            updatedBank.setAddress(bankDTO.getAddress());
+            updatedBank.setWebSite(bankDTO.getWebSite());
+            updatedBank.setCostumerSupportNumber(bankDTO.getCostumerSupportNumber());
+            updatedBank.setEmail(bankDTO.getEmail());
+            return Optional.of(bankRepository.save(updatedBank));
+        }else{
+            return Optional.empty();
+        }
+    }
+
+    public boolean deleteById(long id) {
+        if(findById(id).isPresent()){
+            bankRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }
