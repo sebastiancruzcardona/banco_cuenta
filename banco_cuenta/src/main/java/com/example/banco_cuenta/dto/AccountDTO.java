@@ -13,6 +13,8 @@ public class AccountDTO {
 
     private double balance;
 
+    private Long bankId;
+
     public AccountDTO() {
         super();
     }
