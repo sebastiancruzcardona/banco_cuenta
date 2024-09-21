@@ -24,23 +24,35 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
+    //This method calls the findById method from accountService that returns an Optional
+    //Then, tries to map the Optional AccountDTOGetPostPut by using the .ok() function from ResponseEntity, for this the account has to be present
+    //If the optional is empty, executes the orElseGet() implementing a ResponseEntity.notFound().build()
+    //It is equivalent to writing:
+        /*if(accountDTOGetPutPost.isPresent()){
+          return ResponseEntity.ok(accountDTOGetPutPost);
+        else{
+          return ResponseEntity.notFound().build();
+        }*/
     public ResponseEntity<AccountDTOGetPostPut> getAccountById(@PathVariable long id){
-        Optional<AccountDTOGetPostPut> accountDTOGet = accountService.findById(id);
-        return accountDTOGet.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        Optional<AccountDTOGetPostPut> accountDTOGetPutPost = accountService.findById(id);
+        return accountDTOGetPutPost.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
+    //This method calls the save method from accountService that needs an accountDTO object and returns an Optional
+    //Then, tries to map the Optional accountDTOGetPostPut by using the .ok() function from ResponseEntity, for this the accountDTOGetPostPut has to be present
     public ResponseEntity<AccountDTOGetPostPut> createBank(@RequestBody AccountDTO accountDTO){
-        //return accountService.save(accountDTO);
-        //Is this correct? It was made to catch somehow a status if the insertion cannot be done because of the id
-        Optional<AccountDTOGetPostPut> accountDTOGet = accountService.save(accountDTO);
-        return accountDTOGet.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        Optional<AccountDTOGetPostPut> accountDTOGetPostPut = accountService.save(accountDTO);
+        return accountDTOGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
+    //This method calls the update method from accountService that needs an id and a AccountDTOUpdate object and returns an Optional
+    //Then, tries to map the Optional accountDTOGetPostPut by using the .ok() function from ResponseEntity, for this the accountDTOGetPostPut has to be present
+    //If the optional is empty, executes the orElseGet() implementing a ResponseEntity.notFound().build()
     public ResponseEntity<AccountDTOGetPostPut> updateBank(@PathVariable long id, @RequestBody AccountDTOUpdate accountDTOUpdate){
-        Optional<AccountDTOGetPostPut> account = accountService.update(id, accountDTOUpdate);
-        return account.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        Optional<AccountDTOGetPostPut> accountDTOGetPostPut = accountService.update(id, accountDTOUpdate);
+        return accountDTOGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
