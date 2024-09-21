@@ -22,6 +22,8 @@ public class AccountService {
     @Autowired
     private BankRepository bankRepository;
 
+    //This method finds all banks stored in database and returns a list of AccountDTOGetPutPost
+    //Calls accountRepository.findAll() and uses a for cycle to iterate over the accounts and to add to the Arraylist to return
     public List<AccountDTOGetPostPut> findAll(){
         List<AccountDTOGetPostPut> accountsToReturn = new ArrayList<>();
         List<Account> accounts = accountRepository.findAll();
@@ -33,6 +35,8 @@ public class AccountService {
         return accountsToReturn;
     }
 
+    //This method returns an Optional of BankDTOGetPut
+    //Using id, if the searched account exist, returns the optional, if not, returns an empty Optional
     public Optional<AccountDTOGetPostPut> findById(Long id){
         Optional<Account> account = accountRepository.findById(id);
         if(account.isPresent()){
@@ -43,6 +47,11 @@ public class AccountService {
         return Optional.empty();
     }
 
+    //This method returns an Optional of AccountDTOGetPostPut
+    //First validates if the associated bank exist
+    //Creates an Account object, sets its attributes from accountDTO received as parameter and saves it by calling accountRepository.save()
+    //Uses that Account as an assistant to save calling the repository save() function
+    //If the associated bank does not exist returns an empty Optional
     public Optional<AccountDTOGetPostPut> save(AccountDTO accountDTO){
         Optional<Bank> bank = bankRepository.findById(accountDTO.getBankId());
         if(bank.isPresent()){
@@ -61,6 +70,9 @@ public class AccountService {
         }
     }
 
+    //This method returns an Optional of AccountDTOGetPostPut that can be present or empty.
+    //First, it tries to find the account by id, then, if the Optional account is present, sets the attributes and returns an Optional
+    //If there is not an account identified by that id, returns an empty optional
     public Optional<AccountDTOGetPostPut> update(long id, AccountDTOUpdate accountDTOUpdate){
         Optional<Account> account = accountRepository.findById(id);
         if(account.isPresent()){
@@ -77,6 +89,7 @@ public class AccountService {
         return Optional.empty();
     }
 
+    //This method, validating the Optional in the if block, returns true if deletion was made or false if not
     public boolean deleteById(long id){
         if(accountRepository.findById(id).isPresent()){
             accountRepository.deleteById(id);

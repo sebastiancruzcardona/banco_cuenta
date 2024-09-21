@@ -16,8 +16,8 @@ public class BankService {
     @Autowired
     private BankRepository bankRepository;
 
-    //This method finds all banks stored in database and returns a list o BankDTOGetPutPost
-    //Calls bankRepository.findAll() and uses a for cycle to iterate over the banks and to add to de Arraylist to return
+    //This method finds all banks stored in database and returns a list of BankDTOGetPutPost
+    //Calls bankRepository.findAll() and uses a for cycle to iterate over the banks and to add to the Arraylist to return
     public List<BankDTOGetPutPost> findAll() {
         List<BankDTOGetPutPost> banksToReturn = new ArrayList<>();
         List<Bank> banks = bankRepository.findAll();
@@ -41,9 +41,9 @@ public class BankService {
         return Optional.empty();
     }
 
-    //This method return BankDTOGetPutPost object
+    //This method returns BankDTOGetPutPost object
     //Creates a Bank object, sets its attributes from bankDTO received as parameter and saves it by calling bankRepository.save()
-    //Uses a Bank as an assistant to save calling the repository save() function
+    //Uses that Bank as an assistant to save calling the repository save() function
     public BankDTOGetPutPost save(BankDTO bankDTO) {
         Bank bank = new Bank();
         bank.setName(bankDTO.getName());
@@ -58,7 +58,7 @@ public class BankService {
 
     //This method returns an Optional that can be present or empty.
     //First, it tries to find the bank by id, then, if the Optional bank is present, sets the attributes and returns an Optional
-    //If there is not a bank that identified by that id, returns an empty optional
+    //If there is not a bank identified by that id, returns an empty optional
     public Optional<BankDTOGetPutPost> update(long id, BankDTO bankDTO){
         Optional<Bank> bank = bankRepository.findById(id);
         if(bank.isPresent()){
