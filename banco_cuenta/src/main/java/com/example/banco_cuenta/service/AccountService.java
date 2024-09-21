@@ -1,7 +1,7 @@
 package com.example.banco_cuenta.service;
 
 import com.example.banco_cuenta.dto.AccountDTO;
-import com.example.banco_cuenta.dto.AccountDTOGet;
+import com.example.banco_cuenta.dto.AccountDTOGetPostPut;
 import com.example.banco_cuenta.dto.AccountDTOUpdate;
 import com.example.banco_cuenta.model.Account;
 import com.example.banco_cuenta.model.Bank;
@@ -22,13 +22,13 @@ public class AccountService {
     @Autowired
     private BankRepository bankRepository;
 
-    public List<AccountDTOGet> findAll(){
-        List<AccountDTOGet> accountsToReturn = new ArrayList<>();
+    public List<AccountDTOGetPostPut> findAll(){
+        List<AccountDTOGetPostPut> accountsToReturn = new ArrayList<>();
         List<Account> accounts = accountRepository.findAll();
         for(Account account : accounts){
-            AccountDTOGet accountDTOGet = new AccountDTOGet();
-            accountDTOGet.convertToAccountDTO(account);
-            accountsToReturn.add(accountDTOGet);
+            AccountDTOGetPostPut accountDTOGetPostPut = new AccountDTOGetPostPut();
+            accountDTOGetPostPut.convertToAccountDTO(account);
+            accountsToReturn.add(accountDTOGetPostPut);
         }
         return accountsToReturn;
     }
@@ -37,29 +37,39 @@ public class AccountService {
         return accountRepository.findById(id);
     }*/
 
-    public Optional<AccountDTOGet> findById(Long id){
+    public Optional<AccountDTOGetPostPut> findById(Long id){
         Optional<Account> account = accountRepository.findById(id);
         if(account.isPresent()){
-            AccountDTOGet accountDTOGet = new AccountDTOGet();
-            accountDTOGet.convertToAccountDTO(account.get());
-            return Optional.of(accountDTOGet);
+            AccountDTOGetPostPut accountDTOGetPostPut = new AccountDTOGetPostPut();
+            accountDTOGetPostPut.convertToAccountDTO(account.get());
+            return Optional.of(accountDTOGetPostPut);
         }
         return Optional.empty();
     }
 
-    public Account save(AccountDTO accountDTO){
-        Account account = new Account();
-        account.setUserName(accountDTO.getUserName());
-        account.setUserLastname(accountDTO.getUserLastname());
-        account.setAccountNumber(accountDTO.getAccountNumber());
-        account.setPassword(accountDTO.getPassword());
-        account.setBalance(accountDTO.getBalance());
+    public Optional<AccountDTOGetPostPut> save(AccountDTO accountDTO){
         Optional<Bank> bank = bankRepository.findById(accountDTO.getBankId());
-        bank.ifPresent(account::setBank); //Try catch block missing to handle if is empty
-        return accountRepository.save(account);
+        if(bank.isPresent()){
+            Account account = new Account();
+            account.setUserName(accountDTO.getUserName());
+            account.setUserLastname(accountDTO.getUserLastname());
+            account.setAccountNumber(accountDTO.getAccountNumber());
+            account.setPassword(accountDTO.getPassword());
+            account.setBalance(accountDTO.getBalance());
+            account.setBank(bank.get());
+            AccountDTOGetPostPut savedAccountDTOGetPostPut = new AccountDTOGetPostPut();
+            savedAccountDTOGetPostPut.convertToAccountDTO(accountRepository.save(account));
+            return Optional.of(savedAccountDTOGetPostPut);
+        }else{
+            return Optional.empty();
+        }
+        //bank.ifPresent(account::setBank); //Try catch block missing to handle if is empty
+        //AccountDTOGet savedAccountDTOGet = new AccountDTOGet();
+        //savedAccountDTOGet.convertToAccountDTO(accountRepository.save(account));
+        //return savedAccountDTOGet;
     }
 
-    public Optional<Account> update(long id, AccountDTOUpdate accountDTOUpdate){
+    public Optional<AccountDTOGetPostPut> update(long id, AccountDTOUpdate accountDTOUpdate){
         Optional<Account> account = accountRepository.findById(id);
         if(account.isPresent()){
             Account accountUpdate = account.get();
@@ -67,7 +77,10 @@ public class AccountService {
             accountUpdate.setUserLastname(accountDTOUpdate.getUserLastname());
             accountUpdate.setPassword(accountDTOUpdate.getPassword());
             accountUpdate.setBalance(accountDTOUpdate.getBalance());
-            return Optional.of(accountRepository.save(accountUpdate));
+            accountRepository.save(accountUpdate);
+            AccountDTOGetPostPut accountDTOGetPostPut = new AccountDTOGetPostPut();
+            accountDTOGetPostPut.convertToAccountDTO(accountUpdate);
+            return Optional.of(accountDTOGetPostPut);
         }
         return Optional.empty();
     }

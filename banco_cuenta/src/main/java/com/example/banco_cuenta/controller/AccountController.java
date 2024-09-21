@@ -1,7 +1,7 @@
 package com.example.banco_cuenta.controller;
 
 import com.example.banco_cuenta.dto.AccountDTO;
-import com.example.banco_cuenta.dto.AccountDTOGet;
+import com.example.banco_cuenta.dto.AccountDTOGetPostPut;
 import com.example.banco_cuenta.dto.AccountDTOUpdate;
 import com.example.banco_cuenta.model.Account;
 import com.example.banco_cuenta.service.AccountService;
@@ -19,24 +19,27 @@ public class AccountController {
     private AccountService accountService;
 
     @GetMapping
-    public List<AccountDTOGet> getAllAccounts() {
+    public List<AccountDTOGetPostPut> getAllAccounts() {
         return accountService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AccountDTOGet> getAccountById(@PathVariable long id){
-        Optional<AccountDTOGet> accountDTOGet = accountService.findById(id);
+    public ResponseEntity<AccountDTOGetPostPut> getAccountById(@PathVariable long id){
+        Optional<AccountDTOGetPostPut> accountDTOGet = accountService.findById(id);
         return accountDTOGet.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Account createBank(@RequestBody AccountDTO accountDTO){
-        return accountService.save(accountDTO);
+    public ResponseEntity<AccountDTOGetPostPut> createBank(@RequestBody AccountDTO accountDTO){
+        //return accountService.save(accountDTO);
+        //Is this correct? It was made to catch somehow a status if the insertion cannot be done because of the id
+        Optional<AccountDTOGetPostPut> accountDTOGet = accountService.save(accountDTO);
+        return accountDTOGet.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Account> updateBank(@PathVariable long id, @RequestBody AccountDTOUpdate accountDTOUpdate){
-        Optional<Account> account = accountService.update(id, accountDTOUpdate);
+    public ResponseEntity<AccountDTOGetPostPut> updateBank(@PathVariable long id, @RequestBody AccountDTOUpdate accountDTOUpdate){
+        Optional<AccountDTOGetPostPut> account = accountService.update(id, accountDTOUpdate);
         return account.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
