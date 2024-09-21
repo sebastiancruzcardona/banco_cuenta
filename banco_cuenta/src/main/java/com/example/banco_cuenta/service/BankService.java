@@ -16,6 +16,8 @@ public class BankService {
     @Autowired
     private BankRepository bankRepository;
 
+    //This method finds all banks stored in database and returns a list o BankDTOGetPutPost
+    //Calls bankRepository.findAll() and uses a for cycle to iterate over the banks and to add to de Arraylist to return
     public List<BankDTOGetPutPost> findAll() {
         List<BankDTOGetPutPost> banksToReturn = new ArrayList<>();
         List<Bank> banks = bankRepository.findAll();
@@ -27,6 +29,8 @@ public class BankService {
         return banksToReturn;
     }
 
+    //This method returns an Optional of BankDTOGetPut
+    //Using id, if the searched bank exist, returns the optional, if not, returns an empty Optional
     public Optional<BankDTOGetPutPost> findById(long id) {
         Optional<Bank> bank = bankRepository.findById(id);
         if(bank.isPresent()) {
@@ -37,10 +41,12 @@ public class BankService {
         return Optional.empty();
     }
 
-    //This method creates a Bank object, sets its attributes from bankDTO and saves it by calling bankRepository.save()
+    //This method return BankDTOGetPutPost object
+    //Creates a Bank object, sets its attributes from bankDTO received as parameter and saves it by calling bankRepository.save()
+    //Uses a Bank as an assistant to save calling the repository save() function
     public BankDTOGetPutPost save(BankDTO bankDTO) {
         Bank bank = new Bank();
-        bank.setName(bankDTO.getName()); //Is it necessary to try catch for a null pointer ex?
+        bank.setName(bankDTO.getName());
         bank.setAddress(bankDTO.getAddress());
         bank.setWebSite(bankDTO.getWebSite());
         bank.setCostumerSupportNumber(bankDTO.getCostumerSupportNumber());
@@ -70,6 +76,7 @@ public class BankService {
         }
     }
 
+    //This method, validating the Optional in the if block, returns true if deletion was made or false if not
     public boolean deleteById(long id) {
         if(bankRepository.findById(id).isPresent()) {
             bankRepository.deleteById(id);
