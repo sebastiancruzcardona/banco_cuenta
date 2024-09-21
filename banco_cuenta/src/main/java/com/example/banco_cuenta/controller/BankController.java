@@ -1,6 +1,7 @@
 package com.example.banco_cuenta.controller;
 
 import com.example.banco_cuenta.dto.BankDTO;
+import com.example.banco_cuenta.dto.BankDTOGet;
 import com.example.banco_cuenta.model.Bank;
 import com.example.banco_cuenta.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class BankController {
     private BankService bankService;
 
     @GetMapping
-    public List<Bank> getAllBanks(){
+    public List<BankDTOGet> getAllBanks(){
         return bankService.findAll();
     }
 
@@ -31,9 +32,12 @@ public class BankController {
         else{
           return ResponseEntity.notFound().build();
         }*/
-    public ResponseEntity<Bank> getBankById(@PathVariable long id){
-        Optional<Bank> bank = bankService.findById(id);
-        return bank.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<BankDTOGet> getBankById(@PathVariable long id){
+        BankDTOGet bank = bankService.findById(id);
+        if(bank != null){
+            return ResponseEntity.ok(bank);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping

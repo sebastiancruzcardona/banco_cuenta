@@ -1,11 +1,13 @@
 package com.example.banco_cuenta.service;
 
 import com.example.banco_cuenta.dto.BankDTO;
+import com.example.banco_cuenta.dto.BankDTOGet;
 import com.example.banco_cuenta.model.Bank;
 import com.example.banco_cuenta.repository.BankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,12 +16,25 @@ public class BankService {
     @Autowired
     private BankRepository bankRepository;
 
-    public List<Bank> findAll() {
-        return bankRepository.findAll();
+    public List<BankDTOGet> findAll() {
+        List<BankDTOGet> banksToReturn = new ArrayList<>();
+        List<Bank> banks = bankRepository.findAll();
+        for (Bank bank : banks) {
+            BankDTOGet bankDTOGet = new BankDTOGet();
+            bankDTOGet.convertToBankDTO(bank);
+            banksToReturn.add(bankDTOGet);
+        }
+        return banksToReturn;
     }
 
-    public Optional<Bank> findById(long id) {
-        return bankRepository.findById(id);
+    public BankDTOGet findById(long id) {
+        Optional<Bank> bank = bankRepository.findById(id);
+        if(bank.isPresent()) {
+            BankDTOGet bankDTOGet = new BankDTOGet();
+            bankDTOGet.convertToBankDTO(bank.get());
+            return bankDTOGet;
+        }
+        return null;
     }
 
     //This method creates a Bank object, sets its attributes from bankDTO and saves it by calling bankRepository.save()
@@ -52,7 +67,7 @@ public class BankService {
     }
 
     public boolean deleteById(long id) {
-        if(findById(id).isPresent()){
+        if(bankRepository.findById(id).isPresent()) {
             bankRepository.deleteById(id);
             return true;
         }

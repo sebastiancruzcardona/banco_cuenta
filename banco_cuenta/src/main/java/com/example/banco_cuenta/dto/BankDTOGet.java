@@ -1,6 +1,10 @@
 package com.example.banco_cuenta.dto;
 
-public class BankDTO {
+import com.example.banco_cuenta.model.Bank;
+
+public class BankDTOGet {
+
+    private Long id;
 
     private String name;
 
@@ -11,6 +15,14 @@ public class BankDTO {
     private String costumerSupportNumber;
 
     private String email;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -50,5 +62,14 @@ public class BankDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void convertToBankDTO(Bank bank) {
+        this.setId(bank.getId());
+        this.setName(bank.getName());
+        this.setAddress(bank.getAddress());
+        this.setWebSite(bank.getWebSite());
+        this.setCostumerSupportNumber(bank.getCostumerSupportNumber());
+        this.setEmail(bank.getEmail());
     }
 }
