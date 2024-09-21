@@ -64,6 +64,7 @@ public class BankDTOGetPutPost {
         this.email = email;
     }
 
+    //This method receives a Bank and sets its attributes to the BankDTOGetPuTPost object
     public void convertToBankDTO(Bank bank) {
         this.setId(bank.getId());
         this.setName(bank.getName());

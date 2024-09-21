@@ -74,6 +74,7 @@ public class AccountDTOGetPostPut {
         this.bankId = bankId;
     }
 
+    //This method receives an account and sets its attributes to the accountDTOGetPuTPost object
     public void convertToAccountDTO(Account account){
         this.setId(account.getId());
         this.setUserName(account.getUserName());
