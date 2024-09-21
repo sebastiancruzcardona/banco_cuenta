@@ -24,11 +24,11 @@ public class BankController {
 
     @GetMapping("/{id}")
     //This method calls the findById method from bankService that returns an Optional
-    //Then, tries to map the Optional bank by using the .ok() function from ResponseEntity, for this the bank has to be present
+    //Then, tries to map the Optional bankDTOGEtPutPost by using the .ok() function from ResponseEntity, for this the bank has to be present
     //If the optional is empty, executes the orElseGet() implementing a ResponseEntity.notFound().build()
     //It is equivalent to writing:
-        /*if(bank.isPresent()){
-          return ResponseEntity.ok(bank);
+        /*if(bankDTOGet.isPresent()){
+          return ResponseEntity.ok(bankDTOGet);
         else{
           return ResponseEntity.notFound().build();
         }*/
@@ -44,14 +44,8 @@ public class BankController {
 
     @PutMapping("/{id}")
     //This method calls the update method from bankService that needs an id and a BankDTO object and returns an Optional
-    //Then, tries to map the Optional bank by using the .ok() function from ResponseEntity, for this the bank has to be present
+    //Then, tries to map the Optional bankDTOGetPutPost by using the .ok() function from ResponseEntity, for this the bank has to be present
     //If the optional is empty, executes the orElseGet() implementing a ResponseEntity.notFound().build()
-    //It is equivalent to writing:
-        /*if(bank.isPresent()){
-          return ResponseEntity.ok(bank);
-        else{
-          return ResponseEntity.notFound().build();
-        }*/
     public ResponseEntity<BankDTOGetPutPost> updateBank(@PathVariable long id, @RequestBody BankDTO bankDTO){
         Optional<BankDTOGetPutPost> bank = bankService.update(id, bankDTO);
         return bank.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
