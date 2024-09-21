@@ -2,7 +2,7 @@ package com.example.banco_cuenta.dto;
 
 import com.example.banco_cuenta.model.Bank;
 
-public class BankDTOGet {
+public class BankDTOGetPutPost {
 
     private Long id;
 

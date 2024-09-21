@@ -1,7 +1,7 @@
 package com.example.banco_cuenta.controller;
 
 import com.example.banco_cuenta.dto.BankDTO;
-import com.example.banco_cuenta.dto.BankDTOGet;
+import com.example.banco_cuenta.dto.BankDTOGetPutPost;
 import com.example.banco_cuenta.model.Bank;
 import com.example.banco_cuenta.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class BankController {
     private BankService bankService;
 
     @GetMapping
-    public List<BankDTOGet> getAllBanks(){
+    public List<BankDTOGetPutPost> getAllBanks(){
         return bankService.findAll();
     }
 
@@ -32,13 +32,13 @@ public class BankController {
         else{
           return ResponseEntity.notFound().build();
         }*/
-    public ResponseEntity<BankDTOGet> getBankById(@PathVariable long id){
-        Optional<BankDTOGet> bankDTOGet = bankService.findById(id);
+    public ResponseEntity<BankDTOGetPutPost> getBankById(@PathVariable long id){
+        Optional<BankDTOGetPutPost> bankDTOGet = bankService.findById(id);
         return bankDTOGet.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Bank createBank(@RequestBody BankDTO bankDTO){
+    public BankDTOGetPutPost createBank(@RequestBody BankDTO bankDTO){
         return bankService.save(bankDTO);
     }
 
@@ -52,8 +52,8 @@ public class BankController {
         else{
           return ResponseEntity.notFound().build();
         }*/
-    public ResponseEntity<Bank> updateBank(@PathVariable long id, @RequestBody BankDTO bankDTO){
-        Optional<Bank> bank = bankService.update(id, bankDTO);
+    public ResponseEntity<BankDTOGetPutPost> updateBank(@PathVariable long id, @RequestBody BankDTO bankDTO){
+        Optional<BankDTOGetPutPost> bank = bankService.update(id, bankDTO);
         return bank.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
