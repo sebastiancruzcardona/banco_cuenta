@@ -37,14 +37,14 @@ public class AccountService {
         return accountRepository.findById(id);
     }*/
 
-    public AccountDTOGet findById(Long id){
+    public Optional<AccountDTOGet> findById(Long id){
         Optional<Account> account = accountRepository.findById(id);
         if(account.isPresent()){
             AccountDTOGet accountDTOGet = new AccountDTOGet();
             accountDTOGet.convertToAccountDTO(account.get());
-            return accountDTOGet;
+            return Optional.of(accountDTOGet);
         }
-        return null;
+        return Optional.empty();
     }
 
     public Account save(AccountDTO accountDTO){

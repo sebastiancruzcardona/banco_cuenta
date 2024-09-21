@@ -25,13 +25,8 @@ public class AccountController {
 
     @GetMapping("/{id}")
     public ResponseEntity<AccountDTOGet> getAccountById(@PathVariable long id){
-        //Optional<Account> account = accountService.findById(id);
-        //return account.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-        AccountDTOGet accountDTOGet = accountService.findById(id);
-        if(accountDTOGet != null){
-            return ResponseEntity.ok(accountDTOGet);
-        }
-        return ResponseEntity.notFound().build();
+        Optional<AccountDTOGet> accountDTOGet = accountService.findById(id);
+        return accountDTOGet.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
