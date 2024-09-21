@@ -33,10 +33,6 @@ public class AccountService {
         return accountsToReturn;
     }
 
-    /*public Optional<Account> findById(long id){
-        return accountRepository.findById(id);
-    }*/
-
     public Optional<AccountDTOGetPostPut> findById(Long id){
         Optional<Account> account = accountRepository.findById(id);
         if(account.isPresent()){
@@ -63,10 +59,6 @@ public class AccountService {
         }else{
             return Optional.empty();
         }
-        //bank.ifPresent(account::setBank); //Try catch block missing to handle if is empty
-        //AccountDTOGet savedAccountDTOGet = new AccountDTOGet();
-        //savedAccountDTOGet.convertToAccountDTO(accountRepository.save(account));
-        //return savedAccountDTOGet;
     }
 
     public Optional<AccountDTOGetPostPut> update(long id, AccountDTOUpdate accountDTOUpdate){
