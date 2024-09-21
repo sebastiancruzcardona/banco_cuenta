@@ -1,6 +1,7 @@
 package com.example.banco_cuenta.service;
 
 import com.example.banco_cuenta.dto.AccountDTO;
+import com.example.banco_cuenta.dto.AccountDTOGet;
 import com.example.banco_cuenta.dto.AccountDTOUpdate;
 import com.example.banco_cuenta.model.Account;
 import com.example.banco_cuenta.model.Bank;
@@ -9,6 +10,7 @@ import com.example.banco_cuenta.repository.BankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,12 +22,29 @@ public class AccountService {
     @Autowired
     private BankRepository bankRepository;
 
-    public List<Account> findAll(){
-        return accountRepository.findAll();
+    public List<AccountDTOGet> findAll(){
+        List<AccountDTOGet> accountsToReturn = new ArrayList<>();
+        List<Account> accounts = accountRepository.findAll();
+        for(Account account : accounts){
+            AccountDTOGet accountDTOGet = new AccountDTOGet();
+            accountDTOGet.convertToAccountDTO(account);
+            accountsToReturn.add(accountDTOGet);
+        }
+        return accountsToReturn;
     }
 
-    public Optional<Account> findById(long id){
+    /*public Optional<Account> findById(long id){
         return accountRepository.findById(id);
+    }*/
+
+    public AccountDTOGet findById(Long id){
+        Optional<Account> account = accountRepository.findById(id);
+        if(account.isPresent()){
+            AccountDTOGet accountDTOGet = new AccountDTOGet();
+            accountDTOGet.convertToAccountDTO(account.get());
+            return accountDTOGet;
+        }
+        return null;
     }
 
     public Account save(AccountDTO accountDTO){
@@ -54,7 +73,7 @@ public class AccountService {
     }
 
     public boolean deleteById(long id){
-        if(findById(id).isPresent()){
+        if(accountRepository.findById(id).isPresent()){
             accountRepository.deleteById(id);
             return true;
         }

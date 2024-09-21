@@ -1,6 +1,7 @@
 package com.example.banco_cuenta.controller;
 
 import com.example.banco_cuenta.dto.AccountDTO;
+import com.example.banco_cuenta.dto.AccountDTOGet;
 import com.example.banco_cuenta.dto.AccountDTOUpdate;
 import com.example.banco_cuenta.model.Account;
 import com.example.banco_cuenta.service.AccountService;
@@ -18,14 +19,19 @@ public class AccountController {
     private AccountService accountService;
 
     @GetMapping
-    public List<Account> getAllAccounts() {
+    public List<AccountDTOGet> getAllAccounts() {
         return accountService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Account> getAccountById(@PathVariable long id){
-        Optional<Account> account = accountService.findById(id);
-        return account.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<AccountDTOGet> getAccountById(@PathVariable long id){
+        //Optional<Account> account = accountService.findById(id);
+        //return account.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        AccountDTOGet accountDTOGet = accountService.findById(id);
+        if(accountDTOGet != null){
+            return ResponseEntity.ok(accountDTOGet);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping
