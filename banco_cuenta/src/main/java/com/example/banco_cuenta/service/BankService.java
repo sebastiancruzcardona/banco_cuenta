@@ -27,14 +27,14 @@ public class BankService {
         return banksToReturn;
     }
 
-    public BankDTOGet findById(long id) {
+    public Optional<BankDTOGet> findById(long id) {
         Optional<Bank> bank = bankRepository.findById(id);
         if(bank.isPresent()) {
             BankDTOGet bankDTOGet = new BankDTOGet();
             bankDTOGet.convertToBankDTO(bank.get());
-            return bankDTOGet;
+            return Optional.of(bankDTOGet);
         }
-        return null;
+        return Optional.empty();
     }
 
     //This method creates a Bank object, sets its attributes from bankDTO and saves it by calling bankRepository.save()

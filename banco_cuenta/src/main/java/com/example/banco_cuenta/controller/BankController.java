@@ -33,11 +33,8 @@ public class BankController {
           return ResponseEntity.notFound().build();
         }*/
     public ResponseEntity<BankDTOGet> getBankById(@PathVariable long id){
-        BankDTOGet bank = bankService.findById(id);
-        if(bank != null){
-            return ResponseEntity.ok(bank);
-        }
-        return ResponseEntity.notFound().build();
+        Optional<BankDTOGet> bankDTOGet = bankService.findById(id);
+        return bankDTOGet.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
