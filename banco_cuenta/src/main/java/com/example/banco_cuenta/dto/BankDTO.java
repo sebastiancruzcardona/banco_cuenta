@@ -1,15 +1,21 @@
 package com.example.banco_cuenta.dto;
 
+import jakarta.validation.constraints.*;
+
 public class BankDTO {
 
+    @NotNull(message = "A name must be provided")
+    @Size(min = 3, max = 60, message = "Not a valid name")
     private String name;
 
+    @NotNull(message = "An address must be provided")
     private String address;
 
     private String webSite;
 
     private String costumerSupportNumber;
 
+    @Email(message = "An email must be provided")
     private String email;
 
     public String getName() {

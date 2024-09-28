@@ -4,6 +4,7 @@ import com.example.banco_cuenta.dto.BankDTO;
 import com.example.banco_cuenta.dto.BankDTOGetPutPost;
 import com.example.banco_cuenta.model.Bank;
 import com.example.banco_cuenta.service.BankService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ public class BankController {
     }
 
     @PostMapping
-    public BankDTOGetPutPost createBank(@RequestBody BankDTO bankDTO){
+    public BankDTOGetPutPost createBank(@Valid @RequestBody BankDTO bankDTO){
         return bankService.save(bankDTO);
     }
 
