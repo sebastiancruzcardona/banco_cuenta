@@ -1,11 +1,20 @@
 package com.example.banco_cuenta.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class AccountDTOUpdate {
 
+    @NotBlank(message = "The user name must be provided")
+    @Size(min = 1, max = 40, message = "Not a valid name.")
     private String userName;
 
+    @NotBlank(message = "The user lastname must be provided")
+    @Size(min = 1, max = 40, message = "Not a valid lastname.")
     private String userLastname;
 
+    @NotBlank(message = "The user accountNumber must be provided")
+    @Size(min = 11, max = 11, message = "Not a valid accountNumber.")
     private String password;
 
     private double balance;
