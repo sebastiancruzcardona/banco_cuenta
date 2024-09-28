@@ -5,6 +5,7 @@ import com.example.banco_cuenta.dto.AccountDTOGetPostPut;
 import com.example.banco_cuenta.dto.AccountDTOUpdate;
 import com.example.banco_cuenta.model.Account;
 import com.example.banco_cuenta.service.AccountService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class AccountController {
     @PostMapping
     //This method calls the save method from accountService that needs an accountDTO object and returns an Optional
     //Then, tries to map the Optional accountDTOGetPostPut by using the .ok() function from ResponseEntity, for this the accountDTOGetPostPut has to be present
-    public ResponseEntity<AccountDTOGetPostPut> createBank(@RequestBody AccountDTO accountDTO){
+    public ResponseEntity<AccountDTOGetPostPut> createBank(@Valid @RequestBody AccountDTO accountDTO){
         Optional<AccountDTOGetPostPut> accountDTOGetPostPut = accountService.save(accountDTO);
         return accountDTOGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -50,7 +51,7 @@ public class AccountController {
     //This method calls the update method from accountService that needs an id and a AccountDTOUpdate object and returns an Optional
     //Then, tries to map the Optional accountDTOGetPostPut by using the .ok() function from ResponseEntity, for this the accountDTOGetPostPut has to be present
     //If the optional is empty, executes the orElseGet() implementing a ResponseEntity.notFound().build()
-    public ResponseEntity<AccountDTOGetPostPut> updateBank(@PathVariable long id, @RequestBody AccountDTOUpdate accountDTOUpdate){
+    public ResponseEntity<AccountDTOGetPostPut> updateBank(@PathVariable long id, @Valid @RequestBody AccountDTOUpdate accountDTOUpdate){
         Optional<AccountDTOGetPostPut> accountDTOGetPostPut = accountService.update(id, accountDTOUpdate);
         return accountDTOGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }

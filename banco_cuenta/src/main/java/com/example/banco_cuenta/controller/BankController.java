@@ -4,6 +4,7 @@ import com.example.banco_cuenta.dto.BankDTO;
 import com.example.banco_cuenta.dto.BankDTOGetPutPost;
 import com.example.banco_cuenta.model.Bank;
 import com.example.banco_cuenta.service.BankService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ public class BankController {
     }
 
     @PostMapping
-    public BankDTOGetPutPost createBank(@RequestBody BankDTO bankDTO){
+    public BankDTOGetPutPost createBank(@Valid @RequestBody BankDTO bankDTO){
         return bankService.save(bankDTO);
     }
 
@@ -46,7 +47,7 @@ public class BankController {
     //This method calls the update method from bankService that needs an id and a BankDTO object and returns an Optional
     //Then, tries to map the Optional bankDTOGetPutPost by using the .ok() function from ResponseEntity, for this the bankDTOGetPutPost has to be present
     //If the optional is empty, executes the orElseGet() implementing a ResponseEntity.notFound().build()
-    public ResponseEntity<BankDTOGetPutPost> updateBank(@PathVariable long id, @RequestBody BankDTO bankDTO){
+    public ResponseEntity<BankDTOGetPutPost> updateBank(@PathVariable long id, @Valid @RequestBody BankDTO bankDTO){
         Optional<BankDTOGetPutPost> bankDTOGetPutPost = bankService.update(id, bankDTO);
         return bankDTOGetPutPost.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
