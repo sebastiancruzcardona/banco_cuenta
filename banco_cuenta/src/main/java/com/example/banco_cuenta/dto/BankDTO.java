@@ -4,15 +4,19 @@ import jakarta.validation.constraints.*;
 
 public class BankDTO {
 
-    @NotNull(message = "A name must be provided")
+    @NotBlank(message = "A name must be provided")
     @Size(min = 3, max = 60, message = "Not a valid name")
     private String name;
 
-    @NotNull(message = "An address must be provided")
+    @NotBlank(message = "An address must be provided")
+    @Pattern(regexp = ".*\\b(calle|carrera)\\b.*", message = "Not a valid address")
     private String address;
 
     private String webSite;
 
+    @NotBlank(message = "A customer support number must be provided")
+    @Size(min = 10, max = 10, message = "Not a valid number. Ten digits numbers must be provided")
+    @Pattern(regexp = "\\d+", message = "Only numbers must be provided")
     private String costumerSupportNumber;
 
     @Email(message = "An email must be provided")
